@@ -15,6 +15,7 @@ import telran.forum.dto.UserRegisterDto;
 import telran.forum.exceptions.ForbiddenException;
 import telran.forum.exceptions.UserAuthenticationException;
 import telran.forum.exceptions.UserExistsException;
+import telran.forum.exceptions.UserNotExitsException;
 import telran.forum.model.UserAccount;
 
 @Service
@@ -144,7 +145,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 		if(userAccount.getRoles().contains("Administator"))
 		{
-			UserAccount acc=accountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
+			UserAccount acc=accountRepository.findById(login).orElse(null);
+			if(acc == null)
+			{
+				throw new UserNotExitsException();
+			}
 			Set<String>roleSet=acc.getRoles();
 			roleSet.add(role);
 			acc.setRoles(roleSet);
@@ -167,7 +172,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 		if(userAccount.getRoles().contains("Administator"))
 		{
-			UserAccount acc=accountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
+			UserAccount acc=accountRepository.findById(login).orElse(null);
+			if(acc == null)
+			{
+				throw new UserNotExitsException();
+			}
 			Set<String>roleSet=acc.getRoles();
 			roleSet.add(role);
 			acc.setRoles(roleSet);
