@@ -1,6 +1,7 @@
 package telran.forum.service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,6 +14,7 @@ import telran.forum.dto.UserEditDto;
 import telran.forum.dto.UserProfileDto;
 import telran.forum.dto.UserRegisterDto;
 import telran.forum.exceptions.ForbiddenException;
+import telran.forum.exceptions.RolesSetIsEmptyException;
 import telran.forum.exceptions.UserAuthenticationException;
 import telran.forum.exceptions.UserExistsException;
 import telran.forum.exceptions.UserNotExitsException;
@@ -151,6 +153,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 				throw new UserNotExitsException();
 			}
 			Set<String>roleSet=acc.getRoles();
+			if(roleSet==null)
+			{
+				roleSet=new HashSet<String>();
+			}
 			roleSet.add(role);
 			acc.setRoles(roleSet);
 			accountRepository.save(acc);
@@ -178,7 +184,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 				throw new UserNotExitsException();
 			}
 			Set<String>roleSet=acc.getRoles();
-			roleSet.add(role);
+			if(roleSet==null)
+			{
+				throw new RolesSetIsEmptyException();
+			}
+			roleSet.remove(role);
 			acc.setRoles(roleSet);
 			accountRepository.save(acc);
 			return acc.getRoles();
