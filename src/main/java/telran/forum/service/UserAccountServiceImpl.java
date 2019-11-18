@@ -77,8 +77,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
 		}
-		if(userAccount.getRoles().contains("User") 	)
-		{
+		
 			if(userEditDto.getFirstName()!=null)
 			{
 				userAccount.setFirstName(userEditDto.getFirstName());
@@ -87,7 +86,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 			{
 				userAccount.setLastName(userEditDto.getLastName());
 			}
-		}
+		
 		accountRepository.save(userAccount);
 		return userAccountToUserProfileDto(userAccount);
 	}
@@ -107,7 +106,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 			accountRepository.delete(userAccount);
 			return userAccountToUserProfileDto(userAccount);
 		}
-		if(userAccount.getRoles().contains("Moderator") || userAccount.getRoles().contains("Administator"))
+		if(userAccount.getRoles().contains("Administator"))
 		{
 			accountRepository.delete(userAccount);
 			return userAccountToUserProfileDto(userAccount);
@@ -143,10 +142,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
 		}
-		if(userAccount.getRoles().contains("Moderator") || userAccount.getRoles().contains("Administator"))
+		if(userAccount.getRoles().contains("Administator"))
 		{
 			UserAccount acc=accountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
-			acc.addRole(role);
+			Set<String>roleSet=acc.getRoles();
+			roleSet.add(role);
+			acc.setRoles(roleSet);
 			accountRepository.save(acc);
 			return acc.getRoles();
 		}
@@ -164,10 +165,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
 		}
-		if(userAccount.getRoles().contains("Moderator") || userAccount.getRoles().contains("Administator"))
+		if(userAccount.getRoles().contains("Administator"))
 		{
 			UserAccount acc=accountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
-			acc.removeRole(role);
+			Set<String>roleSet=acc.getRoles();
+			roleSet.add(role);
+			acc.setRoles(roleSet);
 			accountRepository.save(acc);
 			return acc.getRoles();
 		}
