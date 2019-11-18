@@ -55,7 +55,7 @@ UserProfileDto editUser( @RequestHeader("Authorization") String token, @RequestB
 		return userAccountService.addRole(login, role, token);
 	}
 	
-	@DeleteMapping("/remove/role/{login}")
+	@DeleteMapping("/remove/role/{role}")
 	Set<String> removeRole(@RequestParam String login,@PathVariable String role,   @RequestHeader("Authorization") String token)
 	{
 		return userAccountService.removeRole(login, role, token);
