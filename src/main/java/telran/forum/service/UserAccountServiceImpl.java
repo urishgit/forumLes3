@@ -123,11 +123,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
 		}
-		if(userAccount.getRoles().contains("User"))
-		{
+		
 			userAccount.setPassword(password);
 			accountRepository.save(userAccount);
-		}
+		
 		
 	}
 
