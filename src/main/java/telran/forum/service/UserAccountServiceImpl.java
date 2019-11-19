@@ -104,11 +104,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
 		}
-		if(userAccount.getRoles().contains("User") )
-		{
-			accountRepository.delete(userAccount);
-			return userAccountToUserProfileDto(userAccount);
-		}
+	
 		if(userAccount.getRoles().contains("Administator"))
 		{
 			accountRepository.delete(userAccount);
