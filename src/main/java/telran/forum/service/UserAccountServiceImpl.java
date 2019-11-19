@@ -29,7 +29,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Autowired
 	AccountConfiguration accountConfiguration;
 
-	@Password
+
 	@Override
 	public UserProfileDto register(UserRegisterDto userRegisterDto) {
 		if (accountRepository.existsById(userRegisterDto.getLogin())) {
